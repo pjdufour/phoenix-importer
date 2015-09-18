@@ -1,0 +1,1 @@
+http://geonode.state.gov/geoserver/wfs?format_options=charset%3AUTF-8&typename=geonode%3AAfricaAmericas_LSIB_Polygons_Simplified_2015&outputFormat=SHAPE-ZIP&version=1.0.0&service=WFS&request=GetFeature
