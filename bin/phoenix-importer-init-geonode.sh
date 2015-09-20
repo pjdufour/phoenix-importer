@@ -19,6 +19,7 @@
 sudo -u postgres psql -c "CREATE USER phoenix WITH ENCRYPTED PASSWORD 'phoenix';"
 #sudo -u postgres psql -c "CREATE DATABASE template_postgis ENCODING 'UTF8' TEMPLATE template1;"
 #sudo -u postgres psql -d template_postgis -c "CREATE EXTENSION postgis;"
+sudo -u postgres psql -d template_postgis -c "CREATE EXTENSION postgres_fdw;"
 # Other PostGIS extensions are not needed
 #psql -d template_postgis -c "CREATE EXTENSION postgis_topology;"
 #psql -d template_postgis -c "CREATE EXTENSION fuzzystrmatch;"

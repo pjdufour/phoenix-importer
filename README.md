@@ -22,15 +22,19 @@ cp phoenix-importer.git/profile/phoenix-importer.sh /etc/profile.d/
 source /etc/profile.d/phoenix-importer.sh
 ```
 
-Depending on the context, follow either standalone or geonode instructions.  Follow the `database` instructions after either.
+Depending on the context, follow either standalone, OpenGeo Suite, or GeoNode instructions.  Follow the `database` instructions after either.
 
 ## Standalone
 
-We'll now begin project-specific initialization.  Run `phoenix-importer-init-standalone.sh` to:
+We'll now begin project-specific initialization.  As root (`sudo su -`), run `phoenix-importer-init-standalone.sh` to:
 
 - install Python dependencies,
 - install system libraries,
 - install and configure PostGiS;
+
+## OpenGeo Suite
+
+If you are adding to a new OpenGeo Suite deployment, run `phoenix-importer-init-opengeo.sh`.  This script will install the OpenGeo Suite and initialize the Phoenix PostGIS database.
 
 ## GeoNode
 
@@ -54,6 +58,8 @@ PGPASSWORD=phoenix psql -d phoenix -U phoenix
 
 ## Usage
 
+As a regular user (`vagrant` or `ubuntu`) run the following:
+
 ```Shell
 phoenix-importer-init-countries.sh TEMP 
 phoenix-importer-collect-daily.sh TEMP DATE
@@ -67,6 +73,8 @@ For the crontab, try
 00 00 * * * ubuntu_daily_update.sh
 ```
 
+Right now, you can create SQL Views in GeoServer.  For example, `SELECT * FROM phoenix_data_20150917;`.  Automation using the GeoServer REST API is coming soo.
+
 ## Examples
 
 ```Shell
@@ -76,7 +84,7 @@ phoenix-importer-collect-daily.sh /home/vagrant/temp/daily 20150917
 
 ## Contributing
 
-We are not accepting pull requests for this repository.
+We are accepting pull requests for this repository.
 
 ## LICENSE
 

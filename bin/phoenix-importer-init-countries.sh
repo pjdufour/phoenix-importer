@@ -33,14 +33,16 @@ fi
 unzip -u $NAME_AFRICA_AMERICAS.zip
 unzip -u $NAME_EURASIA_OCEANIA.zip
 
-SHP="$TEMP/Global_LSIB_Polygons_Simplified_2015.shp"
-
-ogr2ogr -f "ESRI Shapefile" $SHP "$NAME_AFRICA_AMERICAS.shp"
-ogr2ogr -f "ESRI Shapefile" -append $SHP "$NAME_EURASIA_OCEANIA.shp"
+#SHP="$TEMP/Global_LSIB_Polygons_Simplified_2015.shp"
+#rm $SHP
+#ogr2ogr -f "ESRI Shapefile" $SHP "$NAME_AFRICA_AMERICAS.shp"
+#ogr2ogr -f "ESRI Shapefile" -append -overwrite $SHP "$NAME_EURASIA_OCEANIA.shp"
 
 DB_HOST=localhost
 DB_NAME=phoenix
 DB_USER=phoenix
 DB_PASS=phoenix
 TABLE='countries'
-ogr2ogr -overwrite -f "PostgreSQL" PG:"host=$DB_HOST user=$DB_USER dbname=$DB_NAME password=$DB_PASS" -nln $TABLE -nlt "MULTIPOLYGON" $SHP
+sudo -u postgres psql -d phoenix -c "DROP TABLE IF EXISTS $TABLE;"
+ogr2ogr -lco PRECISION=NO -f "PostgreSQL" PG:"host=$DB_HOST user=$DB_USER dbname=$DB_NAME password=$DB_PASS" -nln $TABLE -nlt "MULTIPOLYGON" "$NAME_AFRICA_AMERICAS.shp"
+ogr2ogr -append -f "PostgreSQL" PG:"host=$DB_HOST user=$DB_USER dbname=$DB_NAME password=$DB_PASS" -nln $TABLE -nlt "MULTIPOLYGON" "$NAME_EURASIA_OCEANIA.shp"

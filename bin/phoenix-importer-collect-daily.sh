@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
 if [ -z "$1" ]; then
     echo "Temp directory must be specified."
     exit 0
@@ -33,10 +35,21 @@ fi
 unzip -u $ZIPFILE
 
 DB_HOST=localhost
-DB_HOST=5432
+DB_PORT=5432
 DB_NAME=phoenix
 DB_USER=phoenix
 DB_PASS=phoenix
-TABLE='phoenix_data_$DATE'
-SQL="SELECT * FROM $TABLE LIMIT 1;"
-PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT --username $DB_USER -c "$SQL"
+TABLE="phoenix_data_"$DATE"_staging"
+MVIEW="phoenix_data_$DATE"
+sudo -u postgres psql -d phoenix -c "DROP MATERIALIZED VIEW IF EXISTS $MVIEW;"
+sudo -u postgres psql -d phoenix -c "DROP TABLE IF EXISTS $TABLE;"
+################
+SQL=$(cat "$DIR/../lib/phoenix-importer-init-daily-raw.sql" | sed -r 's/\{table\}/'$TABLE'/')
+PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"
+#SQL="SELECT * FROM $TABLE LIMIT 1;"
+SQL="COPY $TABLE FROM STDIN;"
+cat "$TEMP/$ZIPFILE" | PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"
+SQL=$(cat "$DIR/../lib/phoenix-importer-init-daily-mview.sql" | sed -r 's/\{table\}/'$TABLE'/'| sed -r 's/\{mview\}/'$MVIEW'/')
+PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"
+#SQL="SELECT * FROM $MVIEW LIMIT 1;"
+#PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"

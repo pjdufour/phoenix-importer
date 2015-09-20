@@ -19,10 +19,14 @@ apt-get install -y postgresql-9.3-postgis-2.1
 sudo -u postgres psql -c "CREATE USER phoenix WITH ENCRYPTED PASSWORD 'phoenix';"
 sudo -u postgres psql -c "CREATE DATABASE template_postgis ENCODING 'UTF8' TEMPLATE template1;"
 sudo -u postgres psql -d template_postgis -c "CREATE EXTENSION postgis;"
+sudo -u postgres psql -d template_postgis -c "CREATE EXTENSION postgres_fdw;"
 # Other PostGIS extensions are not needed
 #psql -d template_postgis -c "CREATE EXTENSION postgis_topology;"
 #psql -d template_postgis -c "CREATE EXTENSION fuzzystrmatch;"
 #psql -d template_postgis -c "CREATE EXTENSION postgis_tiger_geocoder;"
 sudo -u postgres psql -c "CREATE DATABASE phoenix ENCODING 'UTF8' TEMPLATE template_postgis;"
-sudo -u postgres psql -d ex1 -c "ALTER DATABASE phoenix OWNER TO phoenix;"
-sudo -u postgres psql -d ex1 -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO phoenix;"
+sudo -u postgres psql -d phoenix -c "ALTER DATABASE phoenix OWNER TO phoenix;"
+sudo -u postgres psql -d phoenix -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO phoenix;"
+# Initialize GeoServer
+# sudo apt-get install apache2
+sudo apt-get install tomcat7 tomcat7-admin
