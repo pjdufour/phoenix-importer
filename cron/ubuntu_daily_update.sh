@@ -1,3 +1,4 @@
+#!/bin/bash
 DATE=$(date)
 DATE2=$(date "+%Y%m%d")
 TIMESTAMP=$(date +%s)

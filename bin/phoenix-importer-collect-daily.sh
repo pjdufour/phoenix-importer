@@ -23,13 +23,17 @@ fi
 if [ ! -d "$TEMP" ]; then
     mkdir -p $TEMP
 fi
+
 cd $TEMP
 
-ZIPFILE="events.full.$DATE.txt.zip"
+BASEFILE="events.full.$DATE.txt"
+ZIPFILE="$BASEFILE.zip"
 BASEURL="https://s3.amazonaws.com/openeventdata/current/"
 
-if [ ! -f "$ZIPFILE" ]; then
-    wget "$BASEURL$ZIPFILE" -O $ZIPFILE 
+echo "Accessing $TEMP/$ZIPFILE"
+
+if [ ! -f "$TEMP/$ZIPFILE" ]; then
+    wget "$BASEURL$ZIPFILE" -O "$TEMP/$ZIPFILE" 
 fi
 
 unzip -u $ZIPFILE
@@ -49,7 +53,7 @@ SQL=$(cat "$DIR/../lib/phoenix-importer-init-daily-raw.sql" | sed -r 's/\{table\
 PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"
 #SQL="SELECT * FROM $TABLE LIMIT 1;"
 SQL="COPY $TABLE1 FROM STDIN;"
-cat "$TEMP/$ZIPFILE" | PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"
+cat "$TEMP/$BASEFILE" | PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"
 SQL=$(cat "$DIR/../lib/phoenix-importer-init-daily-final.sql" | sed -r 's/\{table1\}/'$TABLE1'/'| sed -r 's/\{table2\}/'$TABLE2'/')
 PGPASSWORD=$DB_PASS psql --host=$DB_HOST --port=$DB_PORT -d $DB_NAME --username $DB_USER -c "$SQL"
 #SQL="SELECT * FROM $MVIEW LIMIT 1;"

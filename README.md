@@ -74,7 +74,8 @@ You'll need to run `phoenix-importer-init-countries.sh` once to download and imp
 For the crontab, try
 
 ```
-00 00 * * * ubuntu_daily_update.sh
+00 06 * * * sudo -i -u ubuntu /opt/phoenix-importer.git/cron/ubuntu_daily_update.sh >> /home/ubuntu/phoenix_log.txt
+00 06 * * * sudo -i -u vagrant /opt/phoenix-importer.git/cron/vagrant_daily_update.sh >> /home/vagrant/phoenix_log.txt
 ```
 
 Right now, you can create SQL Views in GeoServer.  For example, `SELECT * FROM phoenix_data_20150917;`.  Automation using the GeoServer REST API is coming soo.
