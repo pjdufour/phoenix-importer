@@ -24,7 +24,7 @@ source /etc/profile.d/phoenix-importer.sh
 
 Depending on the context, follow either standalone, OpenGeo Suite, or GeoNode instructions.  Follow the `database` instructions after either.
 
-## Standalone
+### Standalone
 
 We'll now begin project-specific initialization.  As root (`sudo su -`), run `phoenix-importer-init-standalone.sh` to:
 
@@ -32,15 +32,15 @@ We'll now begin project-specific initialization.  As root (`sudo su -`), run `ph
 - install system libraries,
 - install and configure PostGiS;
 
-## OpenGeo Suite
+### OpenGeo Suite
 
 If you are adding to a new OpenGeo Suite deployment, run `phoenix-importer-init-opengeo.sh`.  This script will install the OpenGeo Suite and initialize the Phoenix PostGIS database.
 
-## GeoNode
+### GeoNode
 
 If you are adding to an existing GeoNode deployment, run `phoenix-importer-init-geonode.sh`.  This script will only set up the database and will not (re-)install/overwrite system dependencies.
 
-## Database
+### Database
 
 Lastly, we'll need to adjust the authentication permission for PostGIS, so that OGR can authenticate using md5.  Change the pg_hba.conf file to look like the following (`vim /etc/postgresql/9.3/main/pg_hba.conf`)
 
@@ -56,7 +56,7 @@ Restart PostGIS (`/etc/init.d/postgresql restart`) and everything should be read
 PGPASSWORD=phoenix psql -d phoenix -U phoenix
 ```
 
-## Other Dependencies
+### Other Dependencies
 
 phoenix-importer relies on `cybergis-scripts` for publishing tables in GeoServer.  Follow the instructions at [https://github.com/state-hiu/cybergis-scripts](https://github.com/state-hiu/cybergis-scripts) to install as non-debian package to `/opt/cybergis-scripts`.
 
