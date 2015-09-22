@@ -56,6 +56,10 @@ Restart PostGIS (`/etc/init.d/postgresql restart`) and everything should be read
 PGPASSWORD=phoenix psql -d phoenix -U phoenix
 ```
 
+## Other Dependencies
+
+phoenix-importer relies on `cybergis-scripts` for publishing tables in GeoServer.  Follow the instructions at [https://github.com/state-hiu/cybergis-scripts](https://github.com/state-hiu/cybergis-scripts) to install as non-debian package to `/opt/cybergis-scripts`.
+
 ## Usage
 
 As a regular user (`vagrant` or `ubuntu`) run the following:
