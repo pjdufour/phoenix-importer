@@ -38,6 +38,16 @@ fi
 
 unzip -u $ZIPFILE
 
+if [ ! -f "$TEMP/$BASEFILE" ]; then
+    echo "No event data available for date $DATE"
+    exit 0
+fi
+
+if [ ! -s "$TEMP/$BASEFILE" ]; then
+    echo "No event data available for date $DATE"
+    exit 0
+fi
+
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=phoenix
